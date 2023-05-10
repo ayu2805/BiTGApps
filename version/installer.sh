@@ -43,13 +43,14 @@ zip/core/GoogleBackupTransport.tar.xz
 zip/core/GoogleRestore.tar.xz
 zip/core/SetupWizardPrebuilt.tar.xz"
 
-BBX="$TMP/busybox-arm"
-BIN="$TMP/bin"
-install -d "$BIN"
-for i in $($BBX --list); do
-  ln -sf "$BBX" "${BIN}/${i}"
+# Local Environment
+BB="$TMP/busybox-arm"
+rm -rf "$TMP/bin"
+install -d "$TMP/bin"
+for i in $($BB --list); do
+  ln -sf "$BB" "$TMP/bin/$i"
 done
-PATH="${BIN}:${PATH}"
+PATH="$TMP/bin:$PATH"
 
 # Load utility functions
 . $TMP/util_functions.sh
@@ -145,8 +146,8 @@ umount_all() {
 
 mount_all() {
   [ "$slot" ] || slot=$(getprop ro.boot.slot_suffix)
-  [ "$slot" ] || slot=$(grep -o 'androidboot.slot_suffix=.*$' cmdline | cut -d\  -f1 | cut -d= -f2)
-  [ "$slot" ] || slot=$(grep -o 'androidboot.slot=.*$' cmdline | cut -d\  -f1 | cut -d= -f2)
+  [ "$slot" ] || slot=$(grep -o 'androidboot.slot_suffix=.*$' /proc/cmdline | cut -d\  -f1 | cut -d= -f2)
+  [ "$slot" ] || slot=$(grep -o 'androidboot.slot=.*$' /proc/cmdline | cut -d\  -f1 | cut -d= -f2)
   mount -o bind /dev/urandom /dev/random
   if ! is_mounted /cache; then
     mount /cache > /dev/null 2>&1
@@ -202,7 +203,7 @@ mount_all() {
       mount -o bind /system_root/system /system
     fi
   fi
-  for block in system product system_ext; do
+  for block in system product system_ext vendor; do
     for slot in "" _a _b; do
       blockdev --setrw /dev/block/mapper/$block$slot > /dev/null 2>&1
     done
@@ -223,10 +224,9 @@ mount_all() {
   mount -o remount,rw -t auto /system_ext > /dev/null 2>&1
   ui_print "- Mounting /vendor"
   mount -o remount,rw -t auto /vendor > /dev/null 2>&1
-  # Set installation layout
-  SYSTEM="/system"
   # System is writable
-  if ! touch $SYSTEM/.rw >/dev/null 2>&1; then
+  SYSTEM="/system" && touch $SYSTEM/.rw
+  if ! touch $SYSTEM/.rw 2>/dev/null; then
     on_abort "! Read-only file system"
   fi
   if is_mounted /product; then
@@ -472,21 +472,21 @@ rm -rf $SYSTEM_ADDOND/70-bitgapps.sh
 
 # Cleanup
 for f in $SYSTEM $SYSTEM/product $SYSTEM/system_ext $P; do
-  find $f -type d -name '*Calculator*' -exec rm -rf {} \;
-  find $f -type d -name 'Calendar' -exec rm -rf {} \;
-  find $f -type d -name 'Etar' -exec rm -rf {} \;
-  find $f -type d -name 'Contacts' -exec rm -rf {} \;
-  find $f -type d -name '*CLOCK*' -exec rm -rf {} \;
-  find $f -type d -name '*LATINIME*' -exec rm -rf {} \;
-  find $f -type d -name 'Markup' -exec rm -rf {} \;
-  find $f -type d -name 'Photos' -exec rm -rf {} \;
-  find $f -type d -name '*GALLERY*' -exec rm -rf {} \;
-  find $f -type d -name '*Dialer*' -exec rm -rf {} \;
-  find $f -type d -name 'Gearhead' -exec rm -rf {} \;
-  find $f -type d -name '*Messaging*' -exec rm -rf {} \;
-  find $f -type d -name '*messaging*' -exec rm -rf {} \;
-  find $f -type d -name 'Services' -exec rm -rf {} \;
-  find $f -type d -name 'Wellbeing' -exec rm -rf {} \;
+  find $f -type d -iname '*Calculator*' -exec rm -rf {} \;
+  find $f -type d -iname 'Calendar' -exec rm -rf {} \;
+  find $f -type d -iname 'Etar' -exec rm -rf {} \;
+  find $f -type d -iname 'Contacts' -exec rm -rf {} \;
+  find $f -type d -iname '*CLOCK*' -exec rm -rf {} \;
+  find $f -type d -iname '*LATINIME*' -exec rm -rf {} \;
+  find $f -type d -iname 'Markup' -exec rm -rf {} \;
+  find $f -type d -iname 'Photos' -exec rm -rf {} \;
+  find $f -type d -iname '*GALLERY*' -exec rm -rf {} \;
+  find $f -type d -iname '*Dialer*' -exec rm -rf {} \;
+  find $f -type d -iname 'Gearhead' -exec rm -rf {} \;
+  find $f -type d -iname '*Messaging*' -exec rm -rf {} \;
+  find $f -type d -iname '*messaging*' -exec rm -rf {} \;
+  find $f -type d -iname 'Services' -exec rm -rf {} \;
+  find $f -type d -iname 'Wellbeing' -exec rm -rf {} \;
 done
 
 # Google Apps Packages
@@ -558,11 +558,11 @@ fi
 if [ "$supported_setup_config" = "true" ]; then
   ui_print "- Installing SetupWizard"
   for f in $SYSTEM $SYSTEM/product $SYSTEM/system_ext $P; do
-    find $f -type d -name '*MigratePre*' -exec rm -rf {} \;
-    find $f -type d -name '*GoogleBackup*' -exec rm -rf {} \;
-    find $f -type d -name '*GoogleRestore*' -exec rm -rf {} \;
-    find $f -type d -name '*SetupWizard*' -exec rm -rf {} \;
-    find $f -type d -name '*Provision*' -exec rm -rf {} \;
+    find $f -type d -iname '*MigratePre*' -exec rm -rf {} \;
+    find $f -type d -iname '*GoogleBackup*' -exec rm -rf {} \;
+    find $f -type d -iname '*GoogleRestore*' -exec rm -rf {} \;
+    find $f -type d -iname '*SetupWizard*' -exec rm -rf {} \;
+    find $f -type d -iname '*Provision*' -exec rm -rf {} \;
   done
   for f in $SETUPWIZARD; do unzip -oq "$ZIPFILE" "$f" -d "$TMP"; done
   if [ -f "$ZIP_FILE/core/GoogleBackupTransport.tar.xz" ]; then
