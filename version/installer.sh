@@ -225,7 +225,6 @@ mount_all() {
   ui_print "- Mounting /vendor"
   mount -o remount,rw -t auto /vendor > /dev/null 2>&1
   # System is writable
-  SYSTEM="/system" && touch $SYSTEM/.rw
   if ! touch $SYSTEM/.rw 2>/dev/null; then
     on_abort "! Read-only file system"
   fi

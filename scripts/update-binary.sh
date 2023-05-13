@@ -13,6 +13,7 @@ export ZIPFILE="$3"
 export OUTFD="$2"
 export TMP="/tmp"
 export ASH_STANDALONE=1
+export SYSTEM="/system"
 
 # Extract bundled busybox
 unzip -o "$ZIPFILE" "busybox-arm" -d "$TMP"
