@@ -68,8 +68,8 @@ case "$1" in
   restore)
     if [ "$setup_config" = "true" ]; then
       for f in $SYS $SYS/product $SYS/system_ext $P; do
-        find $f -type d -name '*Provision*' -exec rm -rf {} +
-        find $f -type d -name '*SetupWizard*' -exec rm -rf {} +
+        find $f -type d -iname '*Provision*' -exec rm -rf {} \;
+        find $f -type d -iname '*SetupWizard*' -exec rm -rf {} \;
       done
     fi
     list_files | while read FILE REPLACEMENT; do

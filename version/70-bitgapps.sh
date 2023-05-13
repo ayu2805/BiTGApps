@@ -90,20 +90,20 @@ case "$1" in
   ;;
   restore)
     for f in $SYS $SYS/product $SYS/system_ext $P; do
-      find $f -type d -name '*Calculator*' -exec rm -rf {} +
-      find $f -type d -name 'Calendar' -exec rm -rf {} +
-      find $f -type d -name 'Etar' -exec rm -rf {} +
-      find $f -type d -name 'Contacts' -exec rm -rf {} +
-      find $f -type d -name '*CLOCK*' -exec rm -rf {} +
-      find $f -type d -name '*LATINIME*' -exec rm -rf {} +
-      find $f -type d -name '*GALLERY*' -exec rm -rf {} +
-      find $f -type d -name '*Dialer*' -exec rm -rf {} +
-      find $f -type d -name '*messaging*' -exec rm -rf {} +
+      find $f -type d -iname '*Calculator*' -exec rm -rf {} \;
+      find $f -type d -iname 'Calendar' -exec rm -rf {} \;
+      find $f -type d -iname 'Etar' -exec rm -rf {} \;
+      find $f -type d -iname 'Contacts' -exec rm -rf {} \;
+      find $f -type d -iname '*CLOCK*' -exec rm -rf {} \;
+      find $f -type d -iname '*LATINIME*' -exec rm -rf {} \;
+      find $f -type d -iname '*GALLERY*' -exec rm -rf {} \;
+      find $f -type d -iname '*Dialer*' -exec rm -rf {} \;
+      find $f -type d -iname '*messaging*' -exec rm -rf {} \;
     done
     if [ "$setup_config" = "true" ]; then
       for f in $SYS $SYS/product $SYS/system_ext $P; do
-        find $f -type d -name '*Provision*' -exec rm -rf {} +
-        find $f -type d -name '*SetupWizard*' -exec rm -rf {} +
+        find $f -type d -iname '*Provision*' -exec rm -rf {} \;
+        find $f -type d -iname '*SetupWizard*' -exec rm -rf {} \;
       done
     fi
     list_files | while read FILE REPLACEMENT; do
