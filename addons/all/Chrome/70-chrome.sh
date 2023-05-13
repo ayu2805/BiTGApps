@@ -32,9 +32,9 @@ case "$1" in
   ;;
   restore)
     for f in $SYS $SYS/product $SYS/system_ext $P; do
-      find $f -type d -name '*Via*' -exec rm -rf {} +
-      find $f -type d -name '*Browser*' -exec rm -rf {} +
-      find $f -type d -name '*Jelly*' -exec rm -rf {} +
+      find $f -type d -iname '*Via*' -exec rm -rf {} \;
+      find $f -type d -iname '*Browser*' -exec rm -rf {} \;
+      find $f -type d -iname '*Jelly*' -exec rm -rf {} \;
     done
     list_files | while read FILE REPLACEMENT; do
       R=""
