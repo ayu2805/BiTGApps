@@ -6,111 +6,27 @@ zip/core/Messaging.tar.xz
 zip/core/Services.tar.xz
 zip/Permissions.tar.xz"
 
-# Magisk Current Base Folder
-MIRROR="$(magisk --path)/.magisk/mirror"
-
-# Wait for Mounted Partitions
-getprop() { /sbin/getprop $1; }
-rm() { /sbin/rm $1 $2; }
-
-# Workaround for Findutils
-rm="/sbin/rm"
-
-# Wait for Mounted Partitions
-if [ -f "/system/bin/getprop" ]; then
-  getprop() { /system/bin/getprop $1; }
-fi
-if [ -f "/system/bin/rm" ]; then
-  rm() { /system/bin/rm $1 $2; }
-fi
-
-# Workaround for Findutils
-rm="/system/bin/rm"
-
-# Installation base is Bootmode script
-if [[ "$(getprop "sys.bootmode")" = "1" ]]; then
-  # System is writable
-  if ! touch $SYSTEM/.rw >/dev/null 2>&1; then
-    echo "! Read-only file system"
-    exit 1
-  fi
-fi
-
-# Allow mounting, when installation base is Magisk
-if [[ "$(getprop "sys.bootmode")" = "2" ]]; then
-  # Mount actual partitions
-  mount -o remount,rw,errors=continue / > /dev/null 2>&1
-  mount -o remount,rw,errors=continue /dev/root > /dev/null 2>&1
-  mount -o remount,rw,errors=continue /dev/block/dm-0 > /dev/null 2>&1
-  mount -o remount,rw,errors=continue /system > /dev/null 2>&1
-  mount -o remount,rw,errors=continue /product > /dev/null 2>&1
-  mount -o remount,rw,errors=continue /system_ext > /dev/null 2>&1
-  # Mount mirror partitions
-  mount -o remount,rw,errors=continue $MIRROR/system_root 2>/dev/null
-  mount -o remount,rw,errors=continue $MIRROR/system 2>/dev/null
-  mount -o remount,rw,errors=continue $MIRROR/product 2>/dev/null
-  mount -o remount,rw,errors=continue $MIRROR/system_ext 2>/dev/null
-  # Product is a dedicated partition
-  PRODUCT="$(grep -s " $(readlink -f /product) " /proc/mounts)"
-  # Set installation layout
-  SYSTEM="$MIRROR/system"
-  # System is writable
-  if ! touch $SYSTEM/.rw >/dev/null 2>&1; then
-    echo "! Read-only file system"
-    exit 1
-  fi
-  # Product is a dedicated partition
-  [[ "$PRODUCT" ]] && ln -sf /product /system
-  # Dedicated V3 Partitions
-  P="/product /system_ext"
-fi
-
-# Detect whether in boot mode
-[ -z $BOOTMODE ] && ps | grep zygote | grep -qv grep && BOOTMODE="true"
-[ -z $BOOTMODE ] && ps -A 2>/dev/null | grep zygote | grep -qv grep && BOOTMODE="true"
-[ -z $BOOTMODE ] && BOOTMODE="false"
-
-# Strip leading directories
-if [ "$BOOTMODE" = "false" ]; then
-  DEST="-f4-"
-else
-  DEST="-f5-"
-fi
-
-# Extract utility script
-if [ "$BOOTMODE" = "false" ]; then
-  unzip -oq "$ZIPFILE" "util_functions.sh" -d "$TMP"
-fi
-# Allow unpack, when installation base is Magisk
-if [[ "$(getprop "sys.bootmode")" = "2" ]]; then
-  $(unzip -oq "$ZIPFILE" "util_functions.sh" -d "$TMP")
-fi
-chmod +x "$TMP/util_functions.sh"
+# Local Environment
+BB="$TMP/busybox-arm"
+rm -rf "$TMP/bin"
+install -d "$TMP/bin"
+for i in $($BB --list); do
+  ln -sf "$BB" "$TMP/bin/$i"
+done
+PATH="$TMP/bin:$PATH"
 
 # Load utility functions
 . $TMP/util_functions.sh
 
 # Helper Functions
 ui_print() {
-  if [ "$BOOTMODE" = "true" ]; then
-    echo "$1"
-  fi
-  if [ "$BOOTMODE" = "false" ]; then
-    echo -n -e "ui_print $1\n" >> /proc/self/fd/$OUTFD
-    echo -n -e "ui_print\n" >> /proc/self/fd/$OUTFD
-  fi
+  echo -n -e "ui_print $1\n" >> /proc/self/fd/$OUTFD
+  echo -n -e "ui_print\n" >> /proc/self/fd/$OUTFD
 }
 
 is_mounted() {
   grep -q " $(readlink -f $1) " /proc/mounts 2>/dev/null
   return $?
-}
-
-grep_cmdline() {
-  local REGEX="s/^$1=//p"
-  { echo $(cat /proc/cmdline)$(sed -e 's/[^"]//g' -e 's/""//g' /proc/cmdline) | xargs -n 1; \
-    sed -e 's/ = /=/g' -e 's/, /,/g' -e 's/"//g' /proc/bootconfig; \
-  } 2>/dev/null | sed -n "$REGEX"
 }
 
 setup_mountpoint() {
@@ -122,28 +38,22 @@ setup_mountpoint() {
 }
 
 mount_apex() {
-  if "$BOOTMODE"; then
-    return 255
-  fi
   test -d "$SYSTEM/apex" || return 255
   ui_print "- Mounting /apex"
-  local apex dest loop minorx num
+  local apex dest loop minorx num var
   setup_mountpoint /apex
+  mount -t tmpfs tmpfs /apex -o mode=755 && touch /apex/apex
   test -e /dev/block/loop1 && minorx=$(ls -l /dev/block/loop1 | awk '{ print $6 }') || minorx="1"
   num="0"
   for apex in $SYSTEM/apex/*; do
-    dest=/apex/$(basename $apex | sed -E -e 's;\.apex$|\.capex$;;')
-    test "$dest" = /apex/com.android.runtime.release && dest=/apex/com.android.runtime
+    dest=/apex/$(basename $apex | sed -E -e 's;\.apex$|\.capex$;;' -e 's;\.current$|\.release$;;');
     mkdir -p $dest
     case $apex in
       *.apex|*.capex)
-        # Handle CAPEX APKs
         unzip -oq $apex original_apex -d /apex
-        if [ -f "/apex/original_apex" ]; then
-          apex="/apex/original_apex"
-        fi
-        # Handle APEX APKs
+        [ -f "/apex/original_apex" ] && apex="/apex/original_apex"
         unzip -oq $apex apex_payload.img -d /apex
+        mv -f /apex/original_apex $dest.apex 2>/dev/null
         mv -f /apex/apex_payload.img $dest.img
         mount -t ext4 -o ro,noatime $dest.img $dest 2>/dev/null
         if [ $? != 0 ]; then
@@ -163,66 +73,44 @@ mount_apex() {
       *) mount -o bind $apex $dest;;
     esac
   done
-  export ANDROID_RUNTIME_ROOT="/apex/com.android.runtime"
-  export ANDROID_TZDATA_ROOT="/apex/com.android.tzdata"
-  export ANDROID_ART_ROOT="/apex/com.android.art"
-  export ANDROID_I18N_ROOT="/apex/com.android.i18n"
-  local APEXJARS=$(find /apex -name '*.jar' | sort | tr '\n' ':')
-  local FWK=$SYSTEM/framework
-  export BOOTCLASSPATH="${APEXJARS}\
-  $FWK/framework.jar:\
-  $FWK/framework-graphics.jar:\
-  $FWK/ext.jar:\
-  $FWK/telephony-common.jar:\
-  $FWK/voip-common.jar:\
-  $FWK/ims-common.jar:\
-  $FWK/framework-atb-backward-compatibility.jar:\
-  $FWK/android.test.base.jar"
+  for var in $(grep -o 'export .* /.*' /system_root/init.environ.rc | awk '{ print $2 }'); do
+    eval OLD_${var}=\$$var
+  done
+  $(grep -o 'export .* /.*' /system_root/init.environ.rc | sed 's; /;=/;'); unset export
 }
 
 umount_apex() {
-  if "$BOOTMODE"; then
-    return 255
-  fi
   test -d /apex || return 255
-  local dest loop
-  for dest in $(find /apex -type d -mindepth 1 -maxdepth 1); do
-    if [ -f $dest.img ]; then
-      loop=$(mount | grep $dest | cut -d" " -f1)
+  local dest loop var
+  for var in $(grep -o 'export .* /.*' /system_root/init.environ.rc | awk '{ print $2 }'); do
+    if [ "$(eval echo \$OLD_$var)" ]; then
+      eval $var=\$OLD_${var}
+    else
+      eval unset $var
     fi
-    (umount -l $dest
-    losetup -d $loop) 2>/dev/null
+    unset OLD_${var}
   done
+  for dest in $(find /apex -type d -mindepth 1 -maxdepth 1); do
+    loop=$(mount | grep $dest | grep loop | cut -d\  -f1)
+    umount -l $dest; [ "$loop" ] && losetup -d $loop
+  done
+  [ -f /apex/apex ] && umount /apex
   rm -rf /apex 2>/dev/null
-  unset ANDROID_RUNTIME_ROOT
-  unset ANDROID_TZDATA_ROOT
-  unset ANDROID_ART_ROOT
-  unset ANDROID_I18N_ROOT
-  unset BOOTCLASSPATH
 }
 
 umount_all() {
-  if [ "$BOOTMODE" = "false" ]; then
-    umount -l /system > /dev/null 2>&1
-    umount -l /system_root > /dev/null 2>&1
-    umount -l /product > /dev/null 2>&1
-    umount -l /system_ext > /dev/null 2>&1
-  fi
+  umount -l /system > /dev/null 2>&1
+  umount -l /system_root > /dev/null 2>&1
+  umount -l /product > /dev/null 2>&1
+  umount -l /system_ext > /dev/null 2>&1
+  umount -l /vendor > /dev/null 2>&1
+  umount -l /persist > /dev/null 2>&1
 }
 
 mount_all() {
-  if "$BOOTMODE"; then
-    return 255
-  fi
-  # Check A/B Partition Slot
   [ "$slot" ] || slot=$(getprop ro.boot.slot_suffix)
-  [ "$slot" ] || slot=$(grep_cmdline androidboot.slot_suffix)
-  [ "$slot" ] || slot=$(grep_cmdline androidboot.slot)
-  # Store and reset environmental variables
-  OLD_LD_LIB=$LD_LIBRARY_PATH && unset LD_LIBRARY_PATH
-  OLD_LD_PRE=$LD_PRELOAD && unset LD_PRELOAD
-  OLD_LD_CFG=$LD_CONFIG_FILE && unset LD_CONFIG_FILE
-  # Make sure random won't get blocked
+  [ "$slot" ] || slot=$(grep -o 'androidboot.slot_suffix=.*$' /proc/cmdline | cut -d\  -f1 | cut -d= -f2)
+  [ "$slot" ] || slot=$(grep -o 'androidboot.slot=.*$' /proc/cmdline | cut -d\  -f1 | cut -d= -f2)
   mount -o bind /dev/urandom /dev/random
   if ! is_mounted /cache; then
     mount /cache > /dev/null 2>&1
@@ -230,6 +118,8 @@ mount_all() {
   if ! is_mounted /data; then
     mount /data > /dev/null 2>&1
   fi
+  mount -o ro -t auto /vendor > /dev/null 2>&1
+  mount -o ro -t auto /persist > /dev/null 2>&1
   mount -o ro -t auto /product > /dev/null 2>&1
   mount -o ro -t auto /system_ext > /dev/null 2>&1
   [ "$ANDROID_ROOT" ] || ANDROID_ROOT="/system"
@@ -237,7 +127,6 @@ mount_all() {
   if ! is_mounted $ANDROID_ROOT; then
     mount -o ro -t auto $ANDROID_ROOT > /dev/null 2>&1
   fi
-  # Mount bind operation
   case $ANDROID_ROOT in
     /system_root) setup_mountpoint /system;;
     /system)
@@ -260,15 +149,16 @@ mount_all() {
         mount -o ro -t auto /dev/block/mapper/system$slot /system_root > /dev/null 2>&1
         mount -o ro -t auto /dev/block/mapper/product$slot /product > /dev/null 2>&1
         mount -o ro -t auto /dev/block/mapper/system_ext$slot /system_ext > /dev/null 2>&1
+        mount -o ro -t auto /dev/block/mapper/vendor$slot /vendor > /dev/null 2>&1
       fi
       if ! is_mounted $ANDROID_ROOT && [ -e /dev/block/bootdevice/by-name/system$slot ]; then
         mount -o ro -t auto /dev/block/bootdevice/by-name/system$slot /system_root > /dev/null 2>&1
         mount -o ro -t auto /dev/block/bootdevice/by-name/product$slot /product > /dev/null 2>&1
         mount -o ro -t auto /dev/block/bootdevice/by-name/system_ext$slot /system_ext > /dev/null 2>&1
+        mount -o ro -t auto /dev/block/bootdevice/by-name/vendor$slot /vendor > /dev/null 2>&1
       fi
     ;;
   esac
-  # Mount bind operation
   if is_mounted /system_root; then
     if [ -f "/system_root/build.prop" ]; then
       mount -o bind /system_root /system
@@ -276,7 +166,7 @@ mount_all() {
       mount -o bind /system_root/system /system
     fi
   fi
-  for block in system product system_ext; do
+  for block in system product system_ext vendor; do
     for slot in "" _a _b; do
       blockdev --setrw /dev/block/mapper/$block$slot > /dev/null 2>&1
     done
@@ -295,13 +185,12 @@ mount_all() {
   mount -o remount,rw -t auto /product > /dev/null 2>&1
   ui_print "- Mounting /system_ext"
   mount -o remount,rw -t auto /system_ext > /dev/null 2>&1
-  # Set installation layout
-  SYSTEM="/system"
+  ui_print "- Mounting /vendor"
+  mount -o remount,rw -t auto /vendor > /dev/null 2>&1
   # System is writable
-  if ! touch $SYSTEM/.rw >/dev/null 2>&1; then
+  if ! touch $SYSTEM/.rw 2>/dev/null; then
     on_abort "! Read-only file system"
   fi
-  # Product is a dedicated partition
   if is_mounted /product; then
     ln -sf /product /system
   fi
@@ -310,31 +199,26 @@ mount_all() {
 }
 
 unmount_all() {
-  if [ "$BOOTMODE" = "false" ]; then
-    ui_print "- Unmounting partitions"
-    umount -l /system > /dev/null 2>&1
-    umount -l /system_root > /dev/null 2>&1
-    umount -l /product > /dev/null 2>&1
-    umount -l /system_ext > /dev/null 2>&1
-    umount -l /dev/random > /dev/null 2>&1
-    # Restore environmental variables
-    export LD_LIBRARY_PATH=$OLD_LD_LIB
-    export LD_PRELOAD=$OLD_LD_PRE
-    export LD_CONFIG_FILE=$OLD_LD_CFG
-  fi
+  ui_print "- Unmounting partitions"
+  umount -l /system > /dev/null 2>&1
+  umount -l /system_root > /dev/null 2>&1
+  umount -l /product > /dev/null 2>&1
+  umount -l /system_ext > /dev/null 2>&1
+  umount -l /vendor > /dev/null 2>&1
+  umount -l /persist > /dev/null 2>&1
+  umount -l /dev/random > /dev/null 2>&1
 }
 
-f_cleanup() { (find .$TMP -mindepth 1 -maxdepth 1 -type f -not -name 'recovery.log' -not -name 'busybox-arm' -exec $rm -rf '{}' \;); }
+f_cleanup() { (find .$TMP -mindepth 1 -maxdepth 1 -type f -not -name 'recovery.log' -not -name 'busybox-arm' -exec rm -rf {} \;); }
 
-d_cleanup() { (find .$TMP -mindepth 1 -maxdepth 1 -type d -exec $rm -rf '{}' \;); }
+d_cleanup() { (find .$TMP -mindepth 1 -maxdepth 1 -type d -exec rm -rf {} \;); }
 
 on_abort() {
   ui_print "$*"
-  $BOOTMODE && exit 1
   umount_apex
   unmount_all
-  f_cleanup 2>/dev/null
-  d_cleanup 2>/dev/null
+  f_cleanup
+  d_cleanup
   ui_print "! Installation failed"
   ui_print " "
   true
@@ -345,8 +229,8 @@ on_abort() {
 on_installed() {
   umount_apex
   unmount_all
-  f_cleanup 2>/dev/null
-  d_cleanup 2>/dev/null
+  f_cleanup
+  d_cleanup
   ui_print "- Installation complete"
   ui_print " "
   true
@@ -373,8 +257,8 @@ get_prop() {
 }
 
 extracted() {
-  file_list="$(find "$UNZIP_DIR/" -mindepth 1 -type f | cut -d/ ${DEST})"
-  dir_list="$(find "$UNZIP_DIR/" -mindepth 1 -type d | cut -d/ ${DEST})"
+  file_list="$(find "$UNZIP_DIR/" -mindepth 1 -type f | cut -d/ -f4-)"
+  dir_list="$(find "$UNZIP_DIR/" -mindepth 1 -type d | cut -d/ -f4-)"
   for file in $file_list; do
     install -D "$UNZIP_DIR/${file}" "$SYSTEM/${file}"
     chmod 0644 "$SYSTEM/${file}"
@@ -393,13 +277,6 @@ print_title "BiTGApps $version Installer"
 umount_all
 mount_all
 mount_apex
-
-# Internal Calls
-getprop() { /system/bin/getprop $1; }
-rm() { /system/bin/rm $1 $2; }
-
-# Workaround for Findutils
-rm="/system/bin/rm"
 
 # Common Build Properties
 PROPFILES="$SYSTEM/build.prop"
@@ -480,17 +357,10 @@ SYSTEM_OVERLAY="$SYSTEM/product/overlay"
 ui_print "- Installing Messaging Google"
 # Remove AOSP Messages
 for f in $SYSTEM $SYSTEM/product $SYSTEM/system_ext $P; do
-  find $f -type d -name '*Messaging*' -exec $rm -rf {} +
-  find $f -type d -name '*messaging*' -exec $rm -rf {} +
-  find $f -type d -name '*Services*' -exec $rm -rf {} +
+  find $f -type d -iname '*Messaging*' -exec rm -rf {} \;
+  find $f -type d -iname '*Services*' -exec rm -rf {} \;
 done
-if [ "$BOOTMODE" = "false" ]; then
-  for f in $BITGAPPS; do unzip -oq "$ZIPFILE" "$f" -d "$TMP"; done
-fi
-# Allow unpack, when installation base is Magisk
-if [[ "$(getprop "sys.bootmode")" = "2" ]]; then
-  for f in $BITGAPPS; do $(unzip -oq "$ZIPFILE" "$f" -d "$TMP"); done
-fi
+for f in $BITGAPPS; do unzip -oq "$ZIPFILE" "$f" -d "$TMP"; done
 tar -xf $ZIP_FILE/core/Messaging.tar.xz -C $TMP_PRIV
 tar -xf $ZIP_FILE/core/Services.tar.xz -C $TMP_PRIV
 tar -xf $ZIP_FILE/Permissions.tar.xz -C $TMP_PERMISSION
@@ -503,13 +373,7 @@ for f in $BITGAPPS; do rm -rf $TMP/$f; done
 if [ -d "$SYSTEM_ADDOND" ]; then
   ui_print "- Installing OTA survival script"
   ADDOND="70-messaging.sh"
-  if [ "$BOOTMODE" = "false" ]; then
-    unzip -oq "$ZIPFILE" "$ADDOND" -d "$TMP"
-  fi
-  # Allow unpack, when installation base is Magisk
-  if [[ "$(getprop "sys.bootmode")" = "2" ]]; then
-    $(unzip -oq "$ZIPFILE" "$ADDOND" -d "$TMP")
-  fi
+  unzip -oq "$ZIPFILE" "$ADDOND" -d "$TMP"
   # Install OTA survival script
   rm -rf $SYSTEM_ADDOND/$ADDOND
   cp -f $TMP/$ADDOND $SYSTEM_ADDOND/$ADDOND
