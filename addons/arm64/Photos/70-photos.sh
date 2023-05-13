@@ -31,7 +31,7 @@ case "$1" in
   ;;
   restore)
     for f in $SYS $SYS/product $SYS/system_ext $P; do
-      find $f -type d -name '*Gallery*' -exec rm -rf {} +
+      find $f -type d -iname '*Gallery*' -exec rm -rf {} \;
     done
     list_files | while read FILE REPLACEMENT; do
       R=""

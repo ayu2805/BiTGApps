@@ -20,8 +20,6 @@ P="/product /system_ext /postinstall/product /postinstall/system_ext"
 list_files() {
 cat <<EOF
 app/Keyboard/Keyboard.apk
-app/Keyboard/lib/arm/libjni_latinimegoogle.so
-app/Keyboard/lib/arm64/libjni_latinimegoogle.so
 EOF
 }
 
@@ -33,7 +31,7 @@ case "$1" in
   ;;
   restore)
     for f in $SYS $SYS/product $SYS/system_ext $P; do
-      find $f -type d -name '*LatinIME*' -exec rm -rf {} +
+      find $f -type d -iname '*LatinIME*' -exec rm -rf {} \;
     done
     list_files | while read FILE REPLACEMENT; do
       R=""
