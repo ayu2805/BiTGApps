@@ -309,6 +309,12 @@ else
   on_abort "! Current space: $ds_hr"
 fi
 
+# Minimum API Level
+android_sdk="$(get_prop "ro.build.version.sdk")"
+if [ "$android_sdk" -lt "30" ]; then
+  on_abort "! Please install Android 11+"
+fi
+
 # Compressed Packages
 ZIP_FILE="$TMP/zip"
 # Extracted Packages
