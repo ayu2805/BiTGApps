@@ -40,7 +40,7 @@ SYS="$ZIP/sys"
 FRAMEWORK="$ZIP/framework"
 OVERLAY="$ZIP/overlay"
 
-makelicense() {
+license() {
 echo "This BiTGApps build is provided ONLY as courtesy by The BiTGApps Project and is without warranty of ANY kind.
 
 This build is authored by TheHitMan7 and is as such protected by The BiTGApps Project's copyright.
@@ -77,14 +77,15 @@ version() {
   cp -f $COMMON/Contacts/Contacts.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$SYS
   cp -f $COMMON/DeskClock/DeskClock.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$SYS
   cp -f $LEGACY/Keyboard/Keyboard.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$SYS
-  if [ "$API" -ge "29" ]; then
+  if [ "$ARCH" == "arm" ] && [ "$API" -ge "29" ]; then
+    cp -f $LEGACY/Markup/Markup.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$SYS
+  fi
+  if [ "$ARCH" == "arm64" ] && [ "$API" -ge "30" ]; then
     cp -f $LEGACY/Markup/Markup.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$SYS
   fi
   cp -f $LEGACY/Photos/Photos.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$SYS
+  cp -f $LEGACY/Speech/Speech.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$SYS
   cp -f $LEGACY/Dialer/Dialer.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$CORE
-  if [ "$API" -ge "27" ]; then
-    cp -f $LEGACY/Gearhead/Gearhead.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$CORE
-  fi
   cp -f $LEGACY/Messaging/Messaging.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$CORE
   cp -f $LEGACY/Messaging/Services.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$CORE
   if [ "$API" -ge "28" ]; then
@@ -175,30 +176,30 @@ esac
 case $ARCH in
   arm)
     case $API in
-      24) CAPACITY='"590000"' ;;
-      25) CAPACITY='"590000"' ;;
-      26) CAPACITY='"620000"' ;;
-      27) CAPACITY='"620000"' ;;
-      28) CAPACITY='"690000"' ;;
-      29) CAPACITY='"705000"' ;;
-      30) CAPACITY='"650000"' ;;
-      31) CAPACITY='"680000"' ;;
-      32) CAPACITY='"680000"' ;;
-      33) CAPACITY='"680000"' ;;
+      24) CAPACITY='"640000"' ;;
+      25) CAPACITY='"640000"' ;;
+      26) CAPACITY='"640000"' ;;
+      27) CAPACITY='"640000"' ;;
+      28) CAPACITY='"710000"' ;;
+      29) CAPACITY='"725000"' ;;
+      30) CAPACITY='"670000"' ;;
+      31) CAPACITY='"700000"' ;;
+      32) CAPACITY='"700000"' ;;
+      33) CAPACITY='"700000"' ;;
     esac
   ;;
   arm64)
     case $API in
-      24) CAPACITY='"590000"' ;;
-      25) CAPACITY='"590000"' ;;
-      26) CAPACITY='"625000"' ;;
-      27) CAPACITY='"625000"' ;;
-      28) CAPACITY='"705000"' ;;
-      29) CAPACITY='"705000"' ;;
-      30) CAPACITY='"645000"' ;;
-      31) CAPACITY='"675000"' ;;
-      32) CAPACITY='"675000"' ;;
-      33) CAPACITY='"685000"' ;;
+      24) CAPACITY='"655000"' ;;
+      25) CAPACITY='"655000"' ;;
+      26) CAPACITY='"660000"' ;;
+      27) CAPACITY='"660000"' ;;
+      28) CAPACITY='"740000"' ;;
+      29) CAPACITY='"740000"' ;;
+      30) CAPACITY='"680000"' ;;
+      31) CAPACITY='"710000"' ;;
+      32) CAPACITY='"710000"' ;;
+      33) CAPACITY='"720000"' ;;
     esac
   ;;
 esac
@@ -225,7 +226,7 @@ if [ "$API" -ge "30" ]; then
   mkdir -p $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$OVERLAY
 fi
 # Install Package Components
-default; version; legacy; wizard; common; overlay; backend
+default; version; legacy; wizard; common; overlay; backend; license
 # Current Package Variables
 replace_line $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/installer.sh supported_sdk="" supported_sdk="$supported_sdk"
 replace_line $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/installer.sh supported_version="" supported_version="$supported_version"

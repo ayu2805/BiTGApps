@@ -48,7 +48,7 @@ SYS="$ZIP/sys"
 FRAMEWORK="$ZIP/framework"
 OVERLAY="$ZIP/overlay"
 
-makelicense() {
+license() {
 echo "This BiTGApps build is provided ONLY as courtesy by The BiTGApps Project and is without warranty of ANY kind.
 
 This build is authored by TheHitMan7 and is as such protected by The BiTGApps Project's copyright.
@@ -212,7 +212,7 @@ if [ "$API" -ge "30" ]; then
   mkdir -p $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$OVERLAY
 fi
 # Install Package Components
-default; legacy; wizard; common; overlay; backend
+default; legacy; wizard; common; overlay; backend; license
 # Current Package Variables
 replace_line $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/installer.sh supported_sdk="" supported_sdk="$supported_sdk"
 replace_line $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/installer.sh supported_version="" supported_version="$supported_version"
