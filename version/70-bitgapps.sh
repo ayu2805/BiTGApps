@@ -42,9 +42,9 @@ app/Photos/lib/arm/libnative_crash_handler_jni.so
 app/Photos/lib/arm/libnative.so
 app/Photos/lib/arm/liboliveoil.so
 app/Photos/lib/arm/libwebp_android.so
+app/Speech/Speech.apk
 priv-app/ConfigUpdater/ConfigUpdater.apk
 priv-app/Dialer/Dialer.apk
-priv-app/Gearhead/Gearhead.apk
 priv-app/GmsCoreSetupPrebuilt/GmsCoreSetupPrebuilt.apk
 priv-app/GoogleExtServices/GoogleExtServices.apk
 priv-app/GoogleLoginService/GoogleLoginService.apk
