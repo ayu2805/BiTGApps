@@ -4,35 +4,15 @@
 
 ## Introduction
 
-A Custom Google Apps Package which contain Minimal, But has all the required Google Applications to get Google Services functionality.
+BiTGApps is a customized Google Apps Package to sideload Google Apps in Custom Android OS.
 
-<a href="https://BiTGApps.io/docs/Features.html"><img src="https://img.shields.io/badge/-Features%20Offered%20by%20BiTGApps%20Project-9EB23B?style=for-the-badge" /></a>
+| [Donation](https://www.paypal.me/kartikverma443) | [![Donate](https://img.shields.io/badge/Donate-on%20PayPal-brightgreen?style=flat-square)](https://www.paypal.me/kartikverma443) |
+| ---: | :--- |
+| [Development](https://forum.xda-developers.com/t/custom-gapps-bitgapps-for-android.4012165/) | [![XDA](https://img.shields.io/badge/Development-on%20XDA-orange?style=flat-square)](https://forum.xda-developers.com/t/custom-gapps-bitgapps-for-android.4012165/) |
+| [Support Chat](https://t.me/bitgapps_official) | [![Chat](https://img.shields.io/badge/Chat-on%20Telegram-blueviolet?style=flat-square)](https://t.me/bitgapps_official) |
+| [Downloads](https://bitgapps.io) | [![Downloads](https://img.shields.io/github/downloads/BiTGApps/BiTGApps-Release/total?style=social)](https://bitgapps.io) |
 
-## Downloads
-
-* [Frequently Asked Questions (FAQ)](https://BiTGApps.io/faq.html)
-* [All architectures & Download Options](https://BiTGApps.io)
-
-## Useful Links
-
-<a href="https://BiTGApps.io"><img src="https://img.shields.io/badge/-Instructions-EF5B0C?style=for-the-badge&logo=github" /></a>
-<a href="https://t.me/bitgapps_official"><img src="https://img.shields.io/badge/-Support%20Chat-1363DF?style=for-the-badge&logo=telegram" /></a>
-
-## Social Links
-
-<a href="https://forum.xda-developers.com/t/custom-gapps-bitgapps-for-android.4012165"><img src="https://www.svgrepo.com/show/331651/xda-developers.svg" width="45px" /></a>
-<a href="https://t.me/bitgapps_downloads_official"><img src="https://www.vectorlogo.zone/logos/telegram/telegram-icon.svg" width="45px" /></a>
-<a href="https://discord.gg/2p4QEmAtaE"><img src="https://www.vectorlogo.zone/logos/discordapp/discordapp-icon.svg" width="45px" /></a>
-<a href="https://www.reddit.com/r/BiTGApps"><img src="https://www.vectorlogo.zone/logos/reddit/reddit-icon.svg" width="45px" /></a>
-<a href="https://matrix.to/#/#bitgapps:matrix.org"><img src="https://www.vectorlogo.zone/logos/matrix/matrix-icon.svg" width="45px" /></a>
-<a href="https://bio.link/TheHitMan7"><img src="https://cdn.jsdelivr.net/gh/BiTGApps/BiTGApps.io@master/images/biolink.png" width="45px" /></a>
-
-## Support Project
-
-* [Liberapay](https://liberapay.com/TheHitMan7)
-* [Patreon](https://patreon.com/TheHitMan7)
-* [Paypal](https://www.paypal.me/kartikverma443)
-* [buymeacoffee](https://www.buymeacoffee.com/TheHitMan7)
+The latest version of Pre-built BiTGApps can be found at https://bitgapps.io hosted on Github.
 
 ## License
 
