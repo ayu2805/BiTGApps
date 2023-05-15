@@ -480,8 +480,8 @@ for f in $SYSTEM $SYSTEM/product $SYSTEM/system_ext $P; do
   find $f -type d -iname 'Markup' -exec rm -rf {} \;
   find $f -type d -iname 'Photos' -exec rm -rf {} \;
   find $f -type d -iname '*GALLERY*' -exec rm -rf {} \;
+  find $f -type d -iname 'Speech' -exec rm -rf {} \;
   find $f -type d -iname '*Dialer*' -exec rm -rf {} \;
-  find $f -type d -iname 'Gearhead' -exec rm -rf {} \;
   find $f -type d -iname '*Messaging*' -exec rm -rf {} \;
   find $f -type d -iname '*messaging*' -exec rm -rf {} \;
   find $f -type d -iname 'Services' -exec rm -rf {} \;
@@ -501,9 +501,9 @@ tar -xf $ZIP_FILE/sys/GoogleExtShared.tar.xz -C $TMP_SYS
 tar -xf $ZIP_FILE/sys/Keyboard.tar.xz -C $TMP_SYS 2>/dev/null
 tar -xf $ZIP_FILE/sys/Markup.tar.xz -C $TMP_SYS
 tar -xf $ZIP_FILE/sys/Photos.tar.xz -C $TMP_SYS 2>/dev/null
+tar -xf $ZIP_FILE/sys/Speech.tar.xz -C $TMP_SYS 2>/dev/null
 tar -xf $ZIP_FILE/core/ConfigUpdater.tar.xz -C $TMP_PRIV
 tar -xf $ZIP_FILE/core/Dialer.tar.xz -C $TMP_PRIV
-tar -xf $ZIP_FILE/core/Gearhead.tar.xz -C $TMP_PRIV 2>/dev/null
 tar -xf $ZIP_FILE/core/GmsCoreSetupPrebuilt.tar.xz -C $TMP_PRIV 2>/dev/null
 tar -xf $ZIP_FILE/core/GoogleExtServices.tar.xz -C $TMP_PRIV
 tar -xf $ZIP_FILE/core/GoogleLoginService.tar.xz -C $TMP_PRIV 2>/dev/null
