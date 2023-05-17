@@ -40,6 +40,11 @@ SYS="$ZIP/sys"
 FRAMEWORK="$ZIP/framework"
 OVERLAY="$ZIP/overlay"
 
+# Update Version Scripts
+sed -i -e "s|@CLOCK@|find \$f\ -type d -name '*CLOCK*' -exec rm -rf {} \\\;|g" $INSTALLER
+sed -i -e "s|@LATINIME@|find \$f\ -type d -name '*LATINIME*' -exec rm -rf {} \\\;|g" $INSTALLER
+sed -i -e "s|@GALLERY@|find \$f\ -type d -name '*GALLERY*' -exec rm -rf {} \\\;|g" $INSTALLER
+
 license() {
 echo "This BiTGApps build is provided ONLY as courtesy by The BiTGApps Project and is without warranty of ANY kind.
 

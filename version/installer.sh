@@ -4,7 +4,6 @@
 BITGAPPS="
 zip/core/ConfigUpdater.tar.xz
 zip/core/Dialer.tar.xz
-zip/core/Gearhead.tar.xz
 zip/core/GmsCoreSetupPrebuilt.tar.xz
 zip/core/GoogleExtServices.tar.xz
 zip/core/GoogleLoginService.tar.xz
@@ -18,12 +17,13 @@ zip/sys/Calculator.tar.xz
 zip/sys/Calendar.tar.xz
 zip/sys/Contacts.tar.xz
 zip/sys/DeskClock.tar.xz
+zip/sys/Gboard.tar.xz
 zip/sys/GoogleCalendarSyncAdapter.tar.xz
 zip/sys/GoogleContactsSyncAdapter.tar.xz
 zip/sys/GoogleExtShared.tar.xz
-zip/sys/Keyboard.tar.xz
 zip/sys/Markup.tar.xz
 zip/sys/Photos.tar.xz
+zip/sys/Speech.tar.xz
 zip/Sysconfig.tar.xz
 zip/Default.tar.xz
 zip/Permissions.tar.xz
@@ -475,15 +475,15 @@ for f in $SYSTEM $SYSTEM/product $SYSTEM/system_ext $P; do
   find $f -type d -iname 'Calendar' -exec rm -rf {} \;
   find $f -type d -iname 'Etar' -exec rm -rf {} \;
   find $f -type d -iname 'Contacts' -exec rm -rf {} \;
-  find $f -type d -iname '*CLOCK*' -exec rm -rf {} \;
-  find $f -type d -iname '*LATINIME*' -exec rm -rf {} \;
+  @CLOCK@
+  find $f -type d -iname 'Gboard' -exec rm -rf {} \;
+  @LATINIME@
   find $f -type d -iname 'Markup' -exec rm -rf {} \;
   find $f -type d -iname 'Photos' -exec rm -rf {} \;
-  find $f -type d -iname '*GALLERY*' -exec rm -rf {} \;
+  @GALLERY@
   find $f -type d -iname 'Speech' -exec rm -rf {} \;
   find $f -type d -iname '*Dialer*' -exec rm -rf {} \;
   find $f -type d -iname '*Messaging*' -exec rm -rf {} \;
-  find $f -type d -iname '*messaging*' -exec rm -rf {} \;
   find $f -type d -iname 'Services' -exec rm -rf {} \;
   find $f -type d -iname 'Wellbeing' -exec rm -rf {} \;
 done
@@ -495,10 +495,10 @@ tar -xf $ZIP_FILE/sys/Calculator.tar.xz -C $TMP_SYS
 tar -xf $ZIP_FILE/sys/Calendar.tar.xz -C $TMP_SYS
 tar -xf $ZIP_FILE/sys/Contacts.tar.xz -C $TMP_SYS
 tar -xf $ZIP_FILE/sys/DeskClock.tar.xz -C $TMP_SYS 2>/dev/null
+tar -xf $ZIP_FILE/sys/Gboard.tar.xz -C $TMP_SYS 2>/dev/null
 tar -xf $ZIP_FILE/sys/GoogleCalendarSyncAdapter.tar.xz -C $TMP_SYS
 tar -xf $ZIP_FILE/sys/GoogleContactsSyncAdapter.tar.xz -C $TMP_SYS
 tar -xf $ZIP_FILE/sys/GoogleExtShared.tar.xz -C $TMP_SYS
-tar -xf $ZIP_FILE/sys/Keyboard.tar.xz -C $TMP_SYS 2>/dev/null
 tar -xf $ZIP_FILE/sys/Markup.tar.xz -C $TMP_SYS
 tar -xf $ZIP_FILE/sys/Photos.tar.xz -C $TMP_SYS 2>/dev/null
 tar -xf $ZIP_FILE/sys/Speech.tar.xz -C $TMP_SYS 2>/dev/null

@@ -26,15 +26,14 @@ Calculator
 Calendar
 Contacts
 DeskClock
+Gboard
 GoogleCalendarSyncAdapter
 GoogleContactsSyncAdapter
 GoogleExtShared
-Keyboard
 Markup
 Photos
 ConfigUpdater
 Dialer
-Gearhead
 GmsCoreSetupPrebuilt
 GoogleExtServices
 GoogleLoginService

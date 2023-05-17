@@ -35,17 +35,6 @@ jobs:
            git clone https://github.com/BiTGApps/common-sources BiTGApps/sources/common-sources
            git clone https://github.com/BiTGApps/addon-sources BiTGApps/sources/addon-sources
 
-       - name: Update Version Scripts
-         run: |
-           sed -i -e "s/DESKCLOCK/DeskClock/g" BiTGApps/version/70-bitgapps.sh
-           sed -i -e "s/KEYBOARD/Keyboard/g" BiTGApps/version/70-bitgapps.sh
-           sed -i -e "s/CLOCK/Clock/g" BiTGApps/version/70-bitgapps.sh
-           sed -i -e "s/LATINIME/LatinIME/g" BiTGApps/version/70-bitgapps.sh
-           sed -i -e "s/GALLERY/Gallery/g" BiTGApps/version/70-bitgapps.sh
-           sed -i -e "s/CLOCK/Clock/g" BiTGApps/version/installer.sh
-           sed -i -e "s/LATINIME/LatinIME/g" BiTGApps/version/installer.sh
-           sed -i -e "s/GALLERY/Gallery/g" BiTGApps/version/installer.sh
-
        - name: Build BiTGApps Package
          run: |
            cd BiTGApps

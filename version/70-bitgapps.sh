@@ -26,10 +26,10 @@ app/Calculator/Calculator.apk
 app/Calendar/Calendar.apk
 app/Contacts/Contacts.apk
 app/DESKCLOCK/DESKCLOCK.apk
+app/Gboard/Gboard.apk
 app/GoogleCalendarSyncAdapter/GoogleCalendarSyncAdapter.apk
 app/GoogleContactsSyncAdapter/GoogleContactsSyncAdapter.apk
 app/GoogleExtShared/GoogleExtShared.apk
-app/KEYBOARD/KEYBOARD.apk
 app/Markup/Markup.apk
 app/Markup/lib/arm/libsketchology_native.so
 app/Markup/lib/arm64/libsketchology_native.so
@@ -94,9 +94,9 @@ case "$1" in
       find $f -type d -iname 'Calendar' -exec rm -rf {} \;
       find $f -type d -iname 'Etar' -exec rm -rf {} \;
       find $f -type d -iname 'Contacts' -exec rm -rf {} \;
-      find $f -type d -iname '*CLOCK*' -exec rm -rf {} \;
-      find $f -type d -iname '*LATINIME*' -exec rm -rf {} \;
-      find $f -type d -iname '*GALLERY*' -exec rm -rf {} \;
+      @CLOCK@
+      @LATINIME@
+      @GALLERY@
       find $f -type d -iname '*Dialer*' -exec rm -rf {} \;
       find $f -type d -iname '*messaging*' -exec rm -rf {} \;
     done

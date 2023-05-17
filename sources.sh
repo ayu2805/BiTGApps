@@ -18,13 +18,3 @@ git clone https://github.com/BiTGApps/common-sources BiTGApps/sources/common-sou
 
 # Clone Additional Sources
 git clone https://github.com/BiTGApps/addon-sources BiTGApps/sources/addon-sources
-
-# Update Version Scripts
-sed -i -e "s/DESKCLOCK/DeskClock/g" BiTGApps/version/70-bitgapps.sh
-sed -i -e "s/KEYBOARD/Keyboard/g" BiTGApps/version/70-bitgapps.sh
-sed -i -e "s/CLOCK/Clock/g" BiTGApps/version/70-bitgapps.sh
-sed -i -e "s/LATINIME/LatinIME/g" BiTGApps/version/70-bitgapps.sh
-sed -i -e "s/GALLERY/Gallery/g" BiTGApps/version/70-bitgapps.sh
-sed -i -e "s/CLOCK/Clock/g" BiTGApps/version/installer.sh
-sed -i -e "s/LATINIME/LatinIME/g" BiTGApps/version/installer.sh
-sed -i -e "s/GALLERY/Gallery/g" BiTGApps/version/installer.sh

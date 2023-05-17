@@ -40,6 +40,15 @@ SYS="$ZIP/sys"
 FRAMEWORK="$ZIP/framework"
 OVERLAY="$ZIP/overlay"
 
+# Update Version Scripts
+sed -i -e 's#app/DESKCLOCK/DESKCLOCK.apk#app/DeskClock/DeskClock.apk#g' $OTASCRIPT
+sed -i -e "s|@CLOCK@|find \$f\ -type d -iname '*Clock*' -exec rm -rf {} \\\;|g" $OTASCRIPT
+sed -i -e "s|@LATINIME@|find \$f\ -type d -iname '*LatinIME*' -exec rm -rf {} \\\;|g" $OTASCRIPT
+sed -i -e "s|@GALLERY@|find \$f\ -type d -iname '*Gallery*' -exec rm -rf {} \\\;|g" $OTASCRIPT
+sed -i -e "s|@CLOCK@|find \$f\ -type d -iname '*Clock*' -exec rm -rf {} \\\;|g" $INSTALLER
+sed -i -e "s|@LATINIME@|find \$f\ -type d -iname '*LatinIME*' -exec rm -rf {} \\\;|g" $INSTALLER
+sed -i -e "s|@GALLERY@|find \$f\ -type d -iname '*Gallery*' -exec rm -rf {} \\\;|g" $INSTALLER
+
 license() {
 echo "This BiTGApps build is provided ONLY as courtesy by The BiTGApps Project and is without warranty of ANY kind.
 
