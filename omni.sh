@@ -85,7 +85,7 @@ version() {
   cp -f $COMMON/Calendar/Calendar.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$SYS
   cp -f $COMMON/Contacts/Contacts.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$SYS
   cp -f $COMMON/DeskClock/DeskClock.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$SYS
-  cp -f $LEGACY/Keyboard/Keyboard.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$SYS
+  cp -f $LEGACY/Gboard/Gboard.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$SYS
   if [ "$ARCH" == "arm" ] && [ "$API" -ge "29" ]; then
     cp -f $LEGACY/Markup/Markup.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$SYS
   fi

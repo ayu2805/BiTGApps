@@ -1,7 +1,7 @@
 # This file is part of The BiTGApps Project
 
 # List of GApps Packages
-BITGAPPS="zip/sys/Keyboard.tar.xz"
+BITGAPPS="zip/sys/Gboard.tar.xz"
 
 # Local Environment
 BB="$TMP/busybox-arm"
@@ -354,11 +354,11 @@ SYSTEM_OVERLAY="$SYSTEM/product/overlay"
 ui_print "- Installing Keyboard Google"
 # Remove AOSP Keyboard
 for f in $SYSTEM $SYSTEM/product $SYSTEM/system_ext $P; do
-  find $f -type d -iname '*Keyboard*' -exec rm -rf {} \;
+  find $f -type d -iname '*Gboard*' -exec rm -rf {} \;
   find $f -type d -iname '*LatinIME*' -exec rm -rf {} \;
 done
 for f in $BITGAPPS; do unzip -oq "$ZIPFILE" "$f" -d "$TMP"; done
-tar -xf $ZIP_FILE/sys/Keyboard.tar.xz -C $TMP_SYS
+tar -xf $ZIP_FILE/sys/Gboard.tar.xz -C $TMP_SYS
 # Purge runtime permissions
 rm -rf $(find /data -type f -iname "runtime-permissions.xml")
 # Remove Compressed Packages

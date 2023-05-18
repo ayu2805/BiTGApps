@@ -19,7 +19,7 @@ P="/product /system_ext /postinstall/product /postinstall/system_ext"
 
 list_files() {
 cat <<EOF
-app/Keyboard/Keyboard.apk
+app/Gboard/Gboard.apk
 EOF
 }
 

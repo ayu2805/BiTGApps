@@ -8,7 +8,7 @@ mkdir -p "zip"
 mkdir -p "zip/sys"
 
 # Packages
-cp -f Keyboard/Keyboard.tar.xz zip/sys
+cp -f Gboard/Gboard.tar.xz zip/sys
 
 # Scripts
 cp -f update-binary.sh META-INF/com/google/android/update-binary
@@ -18,4 +18,4 @@ cp -f updater-script.sh META-INF/com/google/android/updater-script
 rm -rf LICENSE && mv -f LICENSE.android LICENSE
 
 # Cleanup
-rm -rf update-binary.sh updater-script.sh Keyboard
+rm -rf update-binary.sh updater-script.sh Gboard

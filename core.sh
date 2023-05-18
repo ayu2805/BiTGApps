@@ -41,6 +41,9 @@ FRAMEWORK="$ZIP/framework"
 OVERLAY="$ZIP/overlay"
 
 # Update Version Scripts
+sed -i -e "s|@CLOCK@|find \$f\ -type d -name '*CLOCK*' -exec rm -rf {} \\\;|g" $OTASCRIPT
+sed -i -e "s|@LATINIME@|find \$f\ -type d -name '*LATINIME*' -exec rm -rf {} \\\;|g" $OTASCRIPT
+sed -i -e "s|@GALLERY@|find \$f\ -type d -name '*GALLERY*' -exec rm -rf {} \\\;|g" $OTASCRIPT
 sed -i -e "s|@CLOCK@|find \$f\ -type d -name '*CLOCK*' -exec rm -rf {} \\\;|g" $INSTALLER
 sed -i -e "s|@LATINIME@|find \$f\ -type d -name '*LATINIME*' -exec rm -rf {} \\\;|g" $INSTALLER
 sed -i -e "s|@GALLERY@|find \$f\ -type d -name '*GALLERY*' -exec rm -rf {} \\\;|g" $INSTALLER

@@ -22,7 +22,7 @@ print_title() {
 
 list_files() {
 cat <<EOF
-Keyboard
+Gboard
 LatinIME
 EOF
 }
