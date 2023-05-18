@@ -351,8 +351,8 @@ SYSTEM_FRAMEWORK="$SYSTEM/framework"
 SYSTEM_OVERLAY="$SYSTEM/product/overlay"
 
 # Google Apps Packages
-ui_print "- Installing Keyboard Google"
-# Remove AOSP Keyboard
+ui_print "- Installing Gboard Google"
+# Remove AOSP LatinIME
 for f in $SYSTEM $SYSTEM/product $SYSTEM/system_ext $P; do
   find $f -type d -iname '*Gboard*' -exec rm -rf {} \;
   find $f -type d -iname '*LatinIME*' -exec rm -rf {} \;
@@ -367,7 +367,7 @@ for f in $BITGAPPS; do rm -rf $TMP/$f; done
 # Install OTA Survival Script
 if [ -d "$SYSTEM_ADDOND" ]; then
   ui_print "- Installing OTA survival script"
-  ADDOND="70-keyboard.sh"
+  ADDOND="70-gboard.sh"
   unzip -oq "$ZIPFILE" "$ADDOND" -d "$TMP"
   # Install OTA survival script
   rm -rf $SYSTEM_ADDOND/$ADDOND

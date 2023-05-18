@@ -8,9 +8,9 @@ ZIPSIGNER="tools/zipsigner/zipsigner.jar"
 
 # Initialize Platform Sources
 cp -rf sources/addon-sources/$1/Dialer $1/Dialer
+cp -rf sources/addon-sources/$1/Gboard $1/Gboard
 cp -rf sources/addon-sources/$1/Gearhead $1/Gearhead
 cp -rf sources/addon-sources/$1/Gmail $1/Gmail
-cp -rf sources/addon-sources/$1/Keyboard $1/Keyboard
 cp -rf sources/addon-sources/$1/Maps $1/Maps
 cp -rf sources/addon-sources/$1/Markup $1/Markup
 cp -rf sources/addon-sources/$1/Messaging $1/Messaging
@@ -30,6 +30,15 @@ cp -f $1/Dialer/Dialer-$RELEASE.zip build
 # Sign Dialer Package
 java -jar $ZIPSIGNER build/Dialer-$RELEASE.zip out/Dialer-$RELEASE-$2.zip
 
+# Build Gboard Package
+cp -f $BUSYBOX $1/Gboard
+cd $1/Gboard
+. envsetup.sh && rm -rf envsetup.sh
+zip -qr9 Gboard-$RELEASE.zip * && cd ../..
+cp -f $1/Gboard/Gboard-$RELEASE.zip build
+# Sign Gboard Package
+java -jar $ZIPSIGNER build/Gboard-$RELEASE.zip out/LatinIME-$RELEASE-$2.zip
+
 # Build Gearhead Package
 cp -f $BUSYBOX $1/Gearhead
 cd $1/Gearhead
@@ -47,15 +56,6 @@ zip -qr9 Gmail-$RELEASE.zip * && cd ../..
 cp -f $1/Gmail/Gmail-$RELEASE.zip build
 # Sign Gmail Package
 java -jar $ZIPSIGNER build/Gmail-$RELEASE.zip out/Gmail-$RELEASE-$2.zip
-
-# Build Keyboard Package
-cp -f $BUSYBOX $1/Keyboard
-cd $1/Keyboard
-. envsetup.sh && rm -rf envsetup.sh
-zip -qr9 Keyboard-$RELEASE.zip * && cd ../..
-cp -f $1/Keyboard/Keyboard-$RELEASE.zip build
-# Sign Keyboard Package
-java -jar $ZIPSIGNER build/Keyboard-$RELEASE.zip out/LatinIME-$RELEASE-$2.zip
 
 # Build Maps Package
 cp -f $BUSYBOX $1/Maps
