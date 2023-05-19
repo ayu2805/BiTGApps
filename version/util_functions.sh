@@ -32,6 +32,7 @@ GoogleContactsSyncAdapter
 GoogleExtShared
 Markup
 Photos
+Speech
 ConfigUpdater
 Dialer
 GmsCoreSetupPrebuilt
