@@ -351,8 +351,8 @@ SYSTEM_FRAMEWORK="$SYSTEM/framework"
 SYSTEM_OVERLAY="$SYSTEM/product/overlay"
 
 # Google Apps Packages
-ui_print "- Installing Gboard Google"
-# Remove AOSP LatinIME
+ui_print "- Installing Keyboard Google"
+# Remove AOSP Keyboard
 for f in $SYSTEM $SYSTEM/product $SYSTEM/system_ext $P; do
   find $f -type d -iname '*Gboard*' -exec rm -rf {} \;
   find $f -type d -iname '*LatinIME*' -exec rm -rf {} \;
