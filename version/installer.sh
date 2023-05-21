@@ -499,9 +499,9 @@ tar -xf $ZIP_FILE/sys/Gboard.tar.xz -C $TMP_SYS 2>/dev/null
 tar -xf $ZIP_FILE/sys/GoogleCalendarSyncAdapter.tar.xz -C $TMP_SYS
 tar -xf $ZIP_FILE/sys/GoogleContactsSyncAdapter.tar.xz -C $TMP_SYS
 tar -xf $ZIP_FILE/sys/GoogleExtShared.tar.xz -C $TMP_SYS
-tar -xf $ZIP_FILE/sys/Markup.tar.xz -C $TMP_SYS
+tar -xf $ZIP_FILE/sys/Markup.tar.xz -C $TMP_SYS 2>/dev/null
 tar -xf $ZIP_FILE/sys/Photos.tar.xz -C $TMP_SYS 2>/dev/null
-tar -xf $ZIP_FILE/sys/Speech.tar.xz -C $TMP_SYS 2>/dev/null
+tar -xf $ZIP_FILE/sys/Speech.tar.xz -C $TMP_SYS
 tar -xf $ZIP_FILE/core/ConfigUpdater.tar.xz -C $TMP_PRIV
 tar -xf $ZIP_FILE/core/Dialer.tar.xz -C $TMP_PRIV
 tar -xf $ZIP_FILE/core/GmsCoreSetupPrebuilt.tar.xz -C $TMP_PRIV 2>/dev/null
