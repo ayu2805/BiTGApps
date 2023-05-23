@@ -357,8 +357,8 @@ SYSTEM_OVERLAY="$SYSTEM/product/overlay"
 ui_print "- Installing Messaging Google"
 # Remove AOSP Messages
 for f in $SYSTEM $SYSTEM/product $SYSTEM/system_ext $P; do
+  find $f -type d -name 'Services' -exec rm -rf {} \;
   find $f -type d -iname '*Messaging*' -exec rm -rf {} \;
-  find $f -type d -iname '*Services*' -exec rm -rf {} \;
 done
 for f in $BITGAPPS; do unzip -oq "$ZIPFILE" "$f" -d "$TMP"; done
 tar -xf $ZIP_FILE/core/Messaging.tar.xz -C $TMP_PRIV

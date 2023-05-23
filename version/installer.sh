@@ -484,7 +484,7 @@ for f in $SYSTEM $SYSTEM/product $SYSTEM/system_ext $P; do
   find $f -type d -iname 'Speech' -exec rm -rf {} \;
   find $f -type d -iname '*Dialer*' -exec rm -rf {} \;
   find $f -type d -iname '*Messaging*' -exec rm -rf {} \;
-  find $f -type d -iname 'Services' -exec rm -rf {} \;
+  find $f -type d -name 'Services' -exec rm -rf {} \;
   find $f -type d -iname 'Wellbeing' -exec rm -rf {} \;
 done
 

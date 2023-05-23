@@ -12,6 +12,9 @@ else
   TMP="/postinstall/tmp"
 fi
 
+# Dedicated V3 Partitions
+P="/product /system_ext /postinstall/product /postinstall/system_ext"
+
 . /tmp/backuptool.functions
 
 list_files() {
@@ -28,6 +31,9 @@ case "$1" in
     done
   ;;
   restore)
+    for f in $SYS $SYS/product $SYS/system_ext $P; do
+      find $f -type d -iname '*WebView*' -exec rm -rf {} \;
+    done
     list_files | while read FILE REPLACEMENT; do
       R=""
       [ -n "$REPLACEMENT" ] && R="$S/$REPLACEMENT"
