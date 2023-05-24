@@ -2,5 +2,5 @@
 #
 # This file is part of The BiTGApps Project
 
-export RELEASE="v2.1"
-export VERSION='"v2.1"'
+export RELEASE="v2.2"
+export VERSION='"v2.2"'
