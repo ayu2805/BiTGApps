@@ -2,24 +2,6 @@
 #
 # This file is part of The BiTGApps Project
 
-# Build BASIC Version
-if [ "$VARIANT" == "BASIC" ]; then
-  source core.sh
-  exit 0
-fi
-
-# Build OMNI Version
-if [ "$VARIANT" == "OMNI" ]; then
-  source omni.sh
-  exit 0
-fi
-
-# Build Minified Version
-if [ "$VARIANT" == "MINI" ]; then
-  source minified.sh
-  exit 0
-fi
-
 # Runtime Variables
 ARCH="$1"
 API="$2"
@@ -35,12 +17,16 @@ ALLSOURCES="sources/common-sources"
 # Google Apps Sources
 SOURCES="sources/$ARCH-sources/$API"
 
+# Additional Sources
+COMMON="sources/addon-sources/all"
+LEGACY="sources/addon-sources/$ARCH"
+
 # Installer Backend
 UPDATEBINARY="scripts/update-binary.sh"
 UPDATERSCRIPT="scripts/updater-script.sh"
-INSTALLER="scripts/installer.sh"
-OTASCRIPT="scripts/70-bitgapps.sh"
-UTILITYSCRIPT="scripts/util_functions.sh"
+INSTALLER="minified/installer.sh"
+OTASCRIPT="minified/70-bitgapps.sh"
+UTILITYSCRIPT="minified/util_functions.sh"
 
 # Installer Tools
 BUSYBOX="tools/busybox/busybox-arm"
@@ -83,6 +69,15 @@ default() {
   cp -f $SOURCES/priv-app/Phonesky.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$CORE
   cp -f $SOURCES/priv-app/PrebuiltGmsCore.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$CORE
   cp -f $SOURCES/priv-app/SetupWizardPrebuilt.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$CORE
+}
+
+version() {
+  cp -f $LEGACY/Speech/Speech.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$SYS
+  cp -f $LEGACY/Dialer/Dialer.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$CORE
+  if [ "$API" -ge "26" ]; then
+    cp -f $LEGACY/Gearhead/Gearhead.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$CORE
+  fi
+  cp -f $LEGACY/Velvet/Velvet.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$CORE
 }
 
 legacy() {
@@ -168,30 +163,30 @@ esac
 case $ARCH in
   arm)
     case $API in
-      24) CAPACITY='"180000"' ;;
-      25) CAPACITY='"180000"' ;;
-      26) CAPACITY='"170000"' ;;
-      27) CAPACITY='"170000"' ;;
-      28) CAPACITY='"225000"' ;;
-      29) CAPACITY='"225000"' ;;
-      30) CAPACITY='"170000"' ;;
-      31) CAPACITY='"200000"' ;;
-      32) CAPACITY='"200000"' ;;
-      33) CAPACITY='"200000"' ;;
+      24) CAPACITY='"450000"' ;;
+      25) CAPACITY='"450000"' ;;
+      26) CAPACITY='"480000"' ;;
+      27) CAPACITY='"480000"' ;;
+      28) CAPACITY='"530000"' ;;
+      29) CAPACITY='"530000"' ;;
+      30) CAPACITY='"480000"' ;;
+      31) CAPACITY='"510000"' ;;
+      32) CAPACITY='"510000"' ;;
+      33) CAPACITY='"510000"' ;;
     esac
   ;;
   arm64)
     case $API in
-      24) CAPACITY='"180000"' ;;
-      25) CAPACITY='"180000"' ;;
-      26) CAPACITY='"175000"' ;;
-      27) CAPACITY='"175000"' ;;
-      28) CAPACITY='"240000"' ;;
-      29) CAPACITY='"240000"' ;;
-      30) CAPACITY='"170000"' ;;
-      31) CAPACITY='"200000"' ;;
-      32) CAPACITY='"200000"' ;;
-      33) CAPACITY='"210000"' ;;
+      24) CAPACITY='"650000"' ;;
+      25) CAPACITY='"650000"' ;;
+      26) CAPACITY='"680000"' ;;
+      27) CAPACITY='"680000"' ;;
+      28) CAPACITY='"745000"' ;;
+      29) CAPACITY='"745000"' ;;
+      30) CAPACITY='"675000"' ;;
+      31) CAPACITY='"710000"' ;;
+      32) CAPACITY='"710000"' ;;
+      33) CAPACITY='"715000"' ;;
     esac
   ;;
 esac
@@ -218,7 +213,7 @@ if [ "$API" -ge "30" ]; then
   mkdir -p $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$OVERLAY
 fi
 # Install Package Components
-default; legacy; wizard; common; overlay; backend; license
+default; version; legacy; wizard; common; overlay; backend; license
 # Current Package Variables
 replace_line $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/installer.sh supported_sdk="" supported_sdk="$supported_sdk"
 replace_line $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/installer.sh supported_version="" supported_version="$supported_version"

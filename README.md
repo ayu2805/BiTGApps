@@ -9,7 +9,7 @@ BiTGApps is a customized Google Apps Package to sideload Google Apps in Custom A
 | [Donation](https://www.paypal.me/kartikverma443) | [![Donate](https://img.shields.io/badge/Donate-on%20PayPal-brightgreen?style=flat-square)](https://www.paypal.me/kartikverma443) |
 | ---: | :--- |
 | [Development](https://forum.xda-developers.com/t/custom-gapps-bitgapps-for-android.4012165/) | [![XDA](https://img.shields.io/badge/Development-on%20XDA-orange?style=flat-square)](https://forum.xda-developers.com/t/custom-gapps-bitgapps-for-android.4012165/) |
-| [Support Chat](https://t.me/bitgapps_official) | [![Chat](https://img.shields.io/badge/Chat-on%20Telegram-blueviolet?style=flat-square)](https://t.me/bitgapps_official) |
+| [Support Chat](https://t.me/bitgapps_official) | [![Chat](https://img.shields.io/badge/Chat-on%20Telegram-blueviolet?style=flat-square)](https://t.me/BiTGAppsChat) |
 | [Downloads](https://bitgapps.io) | [![Downloads](https://img.shields.io/github/downloads/BiTGApps/BiTGApps-Release/total?style=social)](https://bitgapps.io) |
 
 The latest version of Pre-built BiTGApps can be found at https://bitgapps.io hosted on Github.
