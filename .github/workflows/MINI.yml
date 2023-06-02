@@ -1,4 +1,4 @@
-name: BASIC
+name: MINI
 
 on:
   workflow_dispatch:
