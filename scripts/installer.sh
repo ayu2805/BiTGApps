@@ -457,10 +457,37 @@ rm -rf $SYSTEM_ETC_PREF/google.xml
 rm -rf $SYSTEM_OVERLAY/PlayStoreOverlay.apk
 rm -rf $SYSTEM_ADDOND/70-bitgapps.sh
 
+# Sideload Optional Configuration
+unzip -oq "$ZIPFILE" "exclude.conf" -d "$TMP"
+
+# Optional Configuration
+for d in /sdcard /sdcard1 /external_sd /data/media/0 /tmp /dev/tmp; do
+  for f in $(find $d -type f -iname "exclude.conf" 2>/dev/null); do
+    if [ -f "$f" ]; then EXCLUDED_CONFIG="$f"; fi
+  done
+done
+
+# Exclusion List
+INCLUDED="GoogleCalendarSyncAdapter"
+
+# Skeleton
+exclusion() {
+  for list in $INCLUDED; do
+    if [ -f "$EXCLUDED_CONFIG" ]; then
+      if [ "$(get_file_prop $EXCLUDED_CONFIG "$list")" = "1" ]; then
+        EXCLUDED="$list"
+      fi
+    else
+      EXCLUDED="$list"
+    fi
+    tar -xf $ZIP_FILE/$1/$EXCLUDED.tar.xz -C $TMP_SYS 2>/dev/null
+    tar -xf $ZIP_FILE/$2/$EXCLUDED.tar.xz -C $TMP_PRIV 2>/dev/null
+  done
+}
+
 # Google Apps Packages
 ui_print "- Installing GApps"
 for f in $BITGAPPS; do unzip -oq "$ZIPFILE" "$f" -d "$TMP"; done
-tar -xf $ZIP_FILE/sys/GoogleCalendarSyncAdapter.tar.xz -C $TMP_SYS
 tar -xf $ZIP_FILE/sys/GoogleContactsSyncAdapter.tar.xz -C $TMP_SYS
 tar -xf $ZIP_FILE/sys/GoogleExtShared.tar.xz -C $TMP_SYS
 tar -xf $ZIP_FILE/core/ConfigUpdater.tar.xz -C $TMP_PRIV
@@ -475,6 +502,8 @@ tar -xf $ZIP_FILE/Default.tar.xz -C $TMP_DEFAULT
 tar -xf $ZIP_FILE/Permissions.tar.xz -C $TMP_PERMISSION
 tar -xf $ZIP_FILE/Preferred.tar.xz -C $TMP_PREFERRED
 tar -xf $ZIP_FILE/overlay/PlayStoreOverlay.tar.xz -C $TMP_OVERLAY 2>/dev/null
+# List of Excluded Packages
+exclusion sys core
 # Remove Compressed Packages
 for f in $BITGAPPS; do rm -rf $TMP/$f; done
 
