@@ -4,24 +4,24 @@
 
 # Build BASIC Version
 if [ "$VARIANT" == "BASIC" ]; then
-  source core.sh
+  source makescripts/core.sh
   exit 0
 fi
 
 # Build OMNI Version
 if [ "$VARIANT" == "OMNI" ]; then
-  source omni.sh
+  source makescripts/omni.sh
   exit 0
 fi
 
 # Build FULL Version
 if [ "$VARIANT" == "FULL" ]; then
-  source full.sh
+  source makescripts/full.sh
   exit 0
 fi
 
 # Build Minified Version
 if [ "$VARIANT" == "MINI" ]; then
-  source minified.sh
+  source makescripts/minified.sh
   exit 0
 fi
