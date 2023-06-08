@@ -18,12 +18,27 @@ The latest version of Pre-built BiTGApps can be found at https://bitgapps.io hos
 
 The latest version of Pre-built BiTGApps can be found at https://bitgapps.io hosted on Github.
 
-Please note that due to this repository being a fork, I will only offer packages tailored for the ARM64 architecture on Android 11, Android 12, and Android 13. Still you can build your required package if you want by folowing the below format:
+Please note that due to this repository being a fork, I will only offer packages tailored for the ARM64 architecture on Android 11, Android 12, and Android 13. Still you can build(java is required) your required package if you want by folowing the below format:
 
 ```
-. envsetup.sh <Verison: CORE/BASIC/FULL/MINI>
-make <platform/architecture: arm/arm64>-<API Level: 24-33>
+. envsetup.sh <Verison> #Version: CORE/BASIC/FULL/MINI
+make <Architecture>-<API Level: 24-33>
 ```
+Replace ```<Version>``` with CORE/BASIC/FULL/MINI, ```<Architecture>``` with arm or arm64 and ```<API Level>``` with 24-33, you can see the table below to know which Android version need which API Level.
+
+| Android Version | API Level |
+| --- | --- |
+| Android 13 | 33 |
+| Android 12.1 | 32 |
+| Android 12 | 31 |
+| Android 11 | 30 |
+| Android 10 | 29 |
+| Android 9 | 28 |
+| Android 8.1 | 27 |
+| Android 8 | 26 |
+| Android 7.1 | 25 |
+| Android 7 | 24 |
+
 
 ## License
 
