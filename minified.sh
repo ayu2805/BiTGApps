@@ -24,9 +24,9 @@ LEGACY="sources/addon-sources/$ARCH"
 # Installer Backend
 UPDATEBINARY="scripts/update-binary.sh"
 UPDATERSCRIPT="scripts/updater-script.sh"
-INSTALLER="minified/installer.sh"
-OTASCRIPT="minified/70-bitgapps.sh"
-UTILITYSCRIPT="minified/util_functions.sh"
+INSTALLER="version/installer.sh"
+OTASCRIPT="version/70-bitgapps.sh"
+UTILITYSCRIPT="version/util_functions.sh"
 
 # Installer Tools
 BUSYBOX="tools/busybox/busybox-arm"

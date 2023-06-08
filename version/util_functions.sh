@@ -40,6 +40,7 @@ Photos
 Speech
 ConfigUpdater
 Dialer
+Gearhead
 GmsCoreSetupPrebuilt
 GoogleExtServices
 GoogleLoginService
@@ -52,6 +53,7 @@ GoogleBackupTransport
 GoogleRestore
 SetupWizardPrebuilt
 Wellbeing
+Velvet
 EOF
 }
 

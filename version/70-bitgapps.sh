@@ -50,6 +50,7 @@ app/Photos/lib/arm/libwebp_android.so
 app/Speech/Speech.apk
 priv-app/ConfigUpdater/ConfigUpdater.apk
 priv-app/Dialer/Dialer.apk
+priv-app/Gearhead/Gearhead.apk
 priv-app/GmsCoreSetupPrebuilt/GmsCoreSetupPrebuilt.apk
 priv-app/GoogleExtServices/GoogleExtServices.apk
 priv-app/GoogleLoginService/GoogleLoginService.apk
@@ -61,6 +62,7 @@ priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk
 priv-app/GoogleBackupTransport/GoogleBackupTransport.apk
 priv-app/GoogleRestore/GoogleRestore.apk
 priv-app/SetupWizardPrebuilt/SetupWizardPrebuilt.apk
+priv-app/Velvet/Velvet.apk
 priv-app/Wellbeing/Wellbeing.apk
 etc/default-permissions/default-permissions.xml
 etc/default-permissions/bitgapps-permissions.xml

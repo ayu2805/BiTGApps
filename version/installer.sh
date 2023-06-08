@@ -5,6 +5,7 @@ BITGAPPS="
 zip/core/ConfigUpdater.tar.xz
 zip/sys/Chrome.tar.xz
 zip/core/Dialer.tar.xz
+zip/core/Gearhead.tar.xz
 zip/core/GmsCoreSetupPrebuilt.tar.xz
 zip/core/GoogleExtServices.tar.xz
 zip/core/GoogleLoginService.tar.xz
@@ -13,6 +14,7 @@ zip/core/Messaging.tar.xz
 zip/core/Services.tar.xz
 zip/core/Phonesky.tar.xz
 zip/core/PrebuiltGmsCore.tar.xz
+zip/core/Velvet.tar.xz
 zip/core/Wellbeing.tar.xz
 zip/sys/Calculator.tar.xz
 zip/sys/Calendar.tar.xz
@@ -493,6 +495,8 @@ for f in $SYSTEM $SYSTEM/product $SYSTEM/system_ext $P; do
   find $f -type d -iname '*Gallery*' -exec rm -rf {} \;
   find $f -type d -iname 'Speech' -exec rm -rf {} \;
   find $f -type d -iname '*Dialer*' -exec rm -rf {} \;
+  find $f -type d -iname 'Gearhead' -exec rm -rf {} \;
+  find $f -type d -iname 'Velvet' -exec rm -rf {} \;
   find $f -type d -iname '*Messaging*' -exec rm -rf {} \;
   find $f -type d -name 'Services' -exec rm -rf {} \;
   find $f -type d -iname 'Wellbeing' -exec rm -rf {} \;
@@ -519,6 +523,7 @@ tar -xf $ZIP_FILE/sys/Photos.tar.xz -C $TMP_SYS 2>/dev/null
 tar -xf $ZIP_FILE/sys/Speech.tar.xz -C $TMP_SYS
 tar -xf $ZIP_FILE/core/ConfigUpdater.tar.xz -C $TMP_PRIV
 tar -xf $ZIP_FILE/core/Dialer.tar.xz -C $TMP_PRIV
+tar -xf $ZIP_FILE/core/Gearhead.tar.xz -C $TMP_PRIV 2>/dev/null
 tar -xf $ZIP_FILE/core/GmsCoreSetupPrebuilt.tar.xz -C $TMP_PRIV 2>/dev/null
 tar -xf $ZIP_FILE/core/GoogleExtServices.tar.xz -C $TMP_PRIV
 tar -xf $ZIP_FILE/core/GoogleLoginService.tar.xz -C $TMP_PRIV 2>/dev/null
@@ -527,6 +532,7 @@ tar -xf $ZIP_FILE/core/Messaging.tar.xz -C $TMP_PRIV
 tar -xf $ZIP_FILE/core/Services.tar.xz -C $TMP_PRIV
 tar -xf $ZIP_FILE/core/Phonesky.tar.xz -C $TMP_PRIV
 tar -xf $ZIP_FILE/core/PrebuiltGmsCore.tar.xz -C $TMP_PRIV
+tar -xf $ZIP_FILE/core/Velvet.tar.xz -C $TMP_PRIV
 tar -xf $ZIP_FILE/core/Wellbeing.tar.xz -C $TMP_PRIV
 tar -xf $ZIP_FILE/Sysconfig.tar.xz -C $TMP_SYSCONFIG
 tar -xf $ZIP_FILE/Default.tar.xz -C $TMP_DEFAULT
