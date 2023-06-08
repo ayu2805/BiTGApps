@@ -17,16 +17,12 @@ ALLSOURCES="sources/common-sources"
 # Google Apps Sources
 SOURCES="sources/$ARCH-sources/$API"
 
-# Additional Sources
-COMMON="sources/addon-sources/all"
-LEGACY="sources/addon-sources/$ARCH"
-
 # Installer Backend
 UPDATEBINARY="scripts/update-binary.sh"
 UPDATERSCRIPT="scripts/updater-script.sh"
-INSTALLER="version/installer.sh"
-OTASCRIPT="version/70-bitgapps.sh"
-UTILITYSCRIPT="version/util_functions.sh"
+INSTALLER="scripts/installer.sh"
+OTASCRIPT="scripts/70-bitgapps.sh"
+UTILITYSCRIPT="scripts/util_functions.sh"
 
 # Installer Tools
 BUSYBOX="tools/busybox/busybox-arm"
@@ -39,14 +35,7 @@ CORE="$ZIP/core"
 SYS="$ZIP/sys"
 FRAMEWORK="$ZIP/framework"
 OVERLAY="$ZIP/overlay"
-
-# Update Version Scripts
-sed -i -e "s|@CLOCK@|find \$f\ -type d -name '*CLOCK*' -exec rm -rf {} \\\;|g" $OTASCRIPT
-sed -i -e "s|@LATINIME@|find \$f\ -type d -name '*LATINIME*' -exec rm -rf {} \\\;|g" $OTASCRIPT
-sed -i -e "s|@GALLERY@|find \$f\ -type d -name '*GALLERY*' -exec rm -rf {} \\\;|g" $OTASCRIPT
-sed -i -e "s|@CLOCK@|find \$f\ -type d -name '*CLOCK*' -exec rm -rf {} \\\;|g" $INSTALLER
-sed -i -e "s|@LATINIME@|find \$f\ -type d -name '*LATINIME*' -exec rm -rf {} \\\;|g" $INSTALLER
-sed -i -e "s|@GALLERY@|find \$f\ -type d -name '*GALLERY*' -exec rm -rf {} \\\;|g" $INSTALLER
+OUT="$ZIP/out"
 
 license() {
 echo "This BiTGApps build is provided ONLY as courtesy by The BiTGApps Project and is without warranty of ANY kind.
@@ -77,19 +66,6 @@ default() {
   cp -f $SOURCES/priv-app/Phonesky.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$CORE
   cp -f $SOURCES/priv-app/PrebuiltGmsCore.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$CORE
   cp -f $SOURCES/priv-app/SetupWizardPrebuilt.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$CORE
-}
-
-version() {
-  cp -f $COMMON/Calculator/Calculator.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$SYS
-  cp -f $COMMON/Calendar/Calendar.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$SYS
-  cp -f $COMMON/Contacts/Contacts.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$SYS
-  cp -f $LEGACY/Speech/Speech.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$SYS
-  cp -f $LEGACY/Dialer/Dialer.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$CORE
-  cp -f $LEGACY/Messaging/Messaging.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$CORE
-  cp -f $LEGACY/Messaging/Services.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$CORE
-  if [ "$API" -ge "28" ]; then
-    cp -f $COMMON/Wellbeing/Wellbeing.tar.xz $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$CORE
-  fi
 }
 
 legacy() {
@@ -154,6 +130,18 @@ replace_line() {
   fi
 }
 
+checker() {
+  OUT="$BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$ZIP"
+  cd $OUT
+  for tar in $(find $1 $2 -type f -iname '*'); do
+    tar -xf $tar -C out | cut -d/ -f2-
+  done
+  CAPACITY="$(du -sxk out | awk '{ print $1 }')"
+  # This include 10MB's of Buffer Space
+  CAPACITY="$(($CAPACITY+10000))"
+  rm -rf out && cd ../../../../..
+}
+
 case $API in
   24) ANDROID="7.1.1"; supported_sdk='"25"'; supported_version='"7.1.1"' ;;
   25) ANDROID="7.1.2"; supported_sdk='"25"'; supported_version='"7.1.2"' ;;
@@ -170,37 +158,6 @@ esac
 case $ARCH in
   arm) supported_architecture='"armeabi-v7a"' ;;
   arm64) supported_architecture='"arm64-v8a"' ;;
-esac
-
-case $ARCH in
-  arm)
-    case $API in
-      24) CAPACITY='"470000"' ;;
-      25) CAPACITY='"470000"' ;;
-      26) CAPACITY='"460000"' ;;
-      27) CAPACITY='"460000"' ;;
-      28) CAPACITY='"535000"' ;;
-      29) CAPACITY='"535000"' ;;
-      30) CAPACITY='"480000"' ;;
-      31) CAPACITY='"510000"' ;;
-      32) CAPACITY='"510000"' ;;
-      33) CAPACITY='"510000"' ;;
-    esac
-  ;;
-  arm64)
-    case $API in
-      24) CAPACITY='"455000"' ;;
-      25) CAPACITY='"455000"' ;;
-      26) CAPACITY='"450000"' ;;
-      27) CAPACITY='"455000"' ;;
-      28) CAPACITY='"530000"' ;;
-      29) CAPACITY='"530000"' ;;
-      30) CAPACITY='"460000"' ;;
-      31) CAPACITY='"490000"' ;;
-      32) CAPACITY='"490000"' ;;
-      33) CAPACITY='"500000"' ;;
-    esac
-  ;;
 esac
 
 # Create Build Directory
@@ -224,15 +181,17 @@ mkdir -p $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$FRAMEWORK
 if [ "$API" -ge "30" ]; then
   mkdir -p $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$OVERLAY
 fi
+mkdir -p $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/$OUT
 # Install Package Components
-default; version; legacy; wizard; common; overlay; backend; license
+default; legacy; wizard; common; overlay; backend; license; checker core sys
 # Current Package Variables
 replace_line $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/installer.sh supported_sdk="" supported_sdk="$supported_sdk"
 replace_line $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/installer.sh supported_version="" supported_version="$supported_version"
 replace_line $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/installer.sh supported_architecture="" supported_architecture="$supported_architecture"
 # Create Utility Script
 replace_line $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/util_functions.sh version="" version="$VERSION"
-replace_line $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/util_functions.sh CAPACITY="" CAPACITY="$CAPACITY"
+# Reflect Installation Size
+sed -i -e "s|@CAPACITY@|$CAPACITY|g" $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR/util_functions.sh
 # Create BiTGApps Package
 cd $BUILDDIR/$TYPE/$ARCH/$RELEASEDIR
 zip -qr9 ${RELEASEDIR}.zip *

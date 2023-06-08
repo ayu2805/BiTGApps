@@ -2,19 +2,16 @@
 #
 # This file is part of The BiTGApps Project
 
-# Create BiTGApps
-mkdir BiTGApps
-
-# Clone Build Sources
-git clone https://github.com/BiTGApps/BiTGApps BiTGApps
-
 # Create Sources
-mkdir BiTGApps/sources
+mkdir sources
 
 # Clone Package Sources
-git clone https://github.com/BiTGApps/arm-sources BiTGApps/sources/arm-sources
-git clone https://github.com/BiTGApps/arm64-sources BiTGApps/sources/arm64-sources
-git clone https://github.com/BiTGApps/common-sources BiTGApps/sources/common-sources
+read -r -p "Do you want to clone arm-sources? [y/N] " response
+if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+    git clone https://github.com/BiTGApps/arm-sources sources/arm-sources
+fi
+git clone https://github.com/BiTGApps/arm64-sources sources/arm64-sources
+git clone https://github.com/BiTGApps/common-sources sources/common-sources
 
 # Clone Additional Sources
-git clone https://github.com/BiTGApps/addon-sources BiTGApps/sources/addon-sources
+git clone https://github.com/BiTGApps/addon-sources sources/addon-sources

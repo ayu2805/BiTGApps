@@ -25,11 +25,16 @@ cat <<EOF
 app/Calculator/Calculator.apk
 app/Calendar/Calendar.apk
 app/Contacts/Contacts.apk
-app/DESKCLOCK/DESKCLOCK.apk
+app/Chrome/Chrome.apk
+app/DeskClock/DeskClock.apk
 app/Gboard/Gboard.apk
+app/Gmail/Gmail.apk
+app/GLH/GLH.apk
 app/GoogleCalendarSyncAdapter/GoogleCalendarSyncAdapter.apk
 app/GoogleContactsSyncAdapter/GoogleContactsSyncAdapter.apk
 app/GoogleExtShared/GoogleExtShared.apk
+app/Library/Library.apk
+app/Maps/Maps.apk
 app/Markup/Markup.apk
 app/Markup/lib/arm/libsketchology_native.so
 app/Markup/lib/arm64/libsketchology_native.so
@@ -94,9 +99,9 @@ case "$1" in
       find $f -type d -iname 'Calendar' -exec rm -rf {} \;
       find $f -type d -iname 'Etar' -exec rm -rf {} \;
       find $f -type d -iname 'Contacts' -exec rm -rf {} \;
-      @CLOCK@
-      @LATINIME@
-      @GALLERY@
+      find $f -type d -iname '*Clock*' -exec rm -rf {} \;
+      find $f -type d -iname '*LatinIME*' -exec rm -rf {} \;
+      find $f -type d -iname '*Gallery*' -exec rm -rf {} \;
       find $f -type d -iname '*Dialer*' -exec rm -rf {} \;
       find $f -type d -iname '*messaging*' -exec rm -rf {} \;
     done

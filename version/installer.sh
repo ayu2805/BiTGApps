@@ -3,6 +3,7 @@
 # List of GApps Packages
 BITGAPPS="
 zip/core/ConfigUpdater.tar.xz
+zip/sys/Chrome.tar.xz
 zip/core/Dialer.tar.xz
 zip/core/GmsCoreSetupPrebuilt.tar.xz
 zip/core/GoogleExtServices.tar.xz
@@ -18,9 +19,13 @@ zip/sys/Calendar.tar.xz
 zip/sys/Contacts.tar.xz
 zip/sys/DeskClock.tar.xz
 zip/sys/Gboard.tar.xz
+zip/sys/GLH.tar.xz
+zip/sys/Gmail.tar.xz
 zip/sys/GoogleCalendarSyncAdapter.tar.xz
 zip/sys/GoogleContactsSyncAdapter.tar.xz
 zip/sys/GoogleExtShared.tar.xz
+zip/sys/Library.tar.xz
+zip/sys/Maps.tar.xz
 zip/sys/Markup.tar.xz
 zip/sys/Photos.tar.xz
 zip/sys/Speech.tar.xz
@@ -471,16 +476,21 @@ rm -rf $SYSTEM_ADDOND/70-bitgapps.sh
 
 # Cleanup
 for f in $SYSTEM $SYSTEM/product $SYSTEM/system_ext $P; do
+  find $f -type d -iname '*Browser*' -exec rm -rf {} \;
+  find $f -type d -iname '*Jelly*' -exec rm -rf {} \;
+  find $f -type d -iname '*Via*' -exec rm -rf {} \;
+  find $f -type d -iname '*Chrome*' -exec rm -rf {} \;
+  find $f -type d -iname '*Library*' -exec rm -rf {} \;
   find $f -type d -iname '*Calculator*' -exec rm -rf {} \;
   find $f -type d -iname 'Calendar' -exec rm -rf {} \;
   find $f -type d -iname 'Etar' -exec rm -rf {} \;
   find $f -type d -iname 'Contacts' -exec rm -rf {} \;
-  @CLOCK@
+  find $f -type d -iname '*Clock*' -exec rm -rf {} \;
   find $f -type d -iname 'Gboard' -exec rm -rf {} \;
-  @LATINIME@
+  find $f -type d -iname '*LatinIME*' -exec rm -rf {} \;
   find $f -type d -iname 'Markup' -exec rm -rf {} \;
   find $f -type d -iname 'Photos' -exec rm -rf {} \;
-  @GALLERY@
+  find $f -type d -iname '*Gallery*' -exec rm -rf {} \;
   find $f -type d -iname 'Speech' -exec rm -rf {} \;
   find $f -type d -iname '*Dialer*' -exec rm -rf {} \;
   find $f -type d -iname '*Messaging*' -exec rm -rf {} \;
@@ -493,12 +503,17 @@ ui_print "- Installing GApps"
 for f in $BITGAPPS; do unzip -oq "$ZIPFILE" "$f" -d "$TMP"; done
 tar -xf $ZIP_FILE/sys/Calculator.tar.xz -C $TMP_SYS
 tar -xf $ZIP_FILE/sys/Calendar.tar.xz -C $TMP_SYS
+tar -xf $ZIP_FILE/sys/Chrome.tar.xz -C $TMP_SYS
 tar -xf $ZIP_FILE/sys/Contacts.tar.xz -C $TMP_SYS
 tar -xf $ZIP_FILE/sys/DeskClock.tar.xz -C $TMP_SYS 2>/dev/null
 tar -xf $ZIP_FILE/sys/Gboard.tar.xz -C $TMP_SYS 2>/dev/null
+tar -xf $ZIP_FILE/sys/GLH.tar.xz -C $TMP_SYS 2>/dev/null
+tar -xf $ZIP_FILE/sys/Gmail.tar.xz -C $TMP_SYS 2>/dev/null
 tar -xf $ZIP_FILE/sys/GoogleCalendarSyncAdapter.tar.xz -C $TMP_SYS
 tar -xf $ZIP_FILE/sys/GoogleContactsSyncAdapter.tar.xz -C $TMP_SYS
 tar -xf $ZIP_FILE/sys/GoogleExtShared.tar.xz -C $TMP_SYS
+tar -xf $ZIP_FILE/sys/Library.tar.xz -C $TMP_SYS
+tar -xf $ZIP_FILE/sys/Maps.tar.xz -C $TMP_SYS 2>/dev/null
 tar -xf $ZIP_FILE/sys/Markup.tar.xz -C $TMP_SYS 2>/dev/null
 tar -xf $ZIP_FILE/sys/Photos.tar.xz -C $TMP_SYS 2>/dev/null
 tar -xf $ZIP_FILE/sys/Speech.tar.xz -C $TMP_SYS

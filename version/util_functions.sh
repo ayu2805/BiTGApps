@@ -25,12 +25,17 @@ cat <<EOF
 Calculator
 Calendar
 Contacts
+Chrome
 DeskClock
 Gboard
+GLH
+Gmail
 GoogleCalendarSyncAdapter
 GoogleContactsSyncAdapter
 GoogleExtShared
+Library
 Markup
+Maps
 Photos
 Speech
 ConfigUpdater
