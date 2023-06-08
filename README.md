@@ -14,6 +14,17 @@ BiTGApps is a customized Google Apps Package to sideload Google Apps in Custom A
 
 The latest version of Pre-built BiTGApps can be found at https://bitgapps.io hosted on Github.
 
+## Note
+
+The latest version of Pre-built BiTGApps can be found at https://bitgapps.io hosted on Github.
+
+Please note that due to this repository being a fork, I will only offer packages tailored for the ARM64 architecture on Android 11, Android 12, and Android 13. Still you can build your required package if you want by folowing the below format:
+
+```
+. envsetup.sh <Verison: CORE/BASIC/FULL/MINI>
+make <platform/architecture: arm/arm64>-<API Level: 24-33>
+```
+
 ## License
 
 The BiTGApps Project itself is licensed under the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.txt) and anyone wanting to use it has to adhere to this license.
