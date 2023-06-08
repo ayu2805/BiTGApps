@@ -18,7 +18,7 @@
 
 TOPDIR := .
 BUILD_SYSTEM := $(TOPDIR)
-BUILD_GAPPS := $(BUILD_SYSTEM)/build.sh
+BUILD_GAPPS := $(BUILD_SYSTEM)/makescripts/build.sh
 APIS := 24 25 26 27 28 29 30 31 32 33
 PLATFORMS := arm arm64
 LOWEST_API_arm := 24
